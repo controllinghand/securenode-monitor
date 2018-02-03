@@ -22,13 +22,12 @@ cd
 rm -r snmon
 mkdir snmon
 
-# Change the directory to ~/smartnode/
-cd ~/smartnode/
+# Change the directory to ~/snmon/
+cd ~/snmon/
 
 # Download the appropriate scripts
 wget https://rawgit.com/controllinghand/smartnode-monitor/master/snmonagent.sh
 
 # Create a cronjob for monitoring agent to collect data every 10 minutes
-# (crontab -l ; echo "*/1 * * * * ~/smartnode/makerun.sh") | crontab -
 (crontab -l 2>/dev/null | grep -v -F "snmon/snmonagent.sh" ; echo "*/10 * * * * ~/snmon/snmonagent.sh" ) | crontab -
 chmod 0700 ./snmonagent.sh
