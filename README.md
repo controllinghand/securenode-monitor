@@ -42,7 +42,7 @@
 
 #### Login to your vps as smartadmin and su - (switch to the root user to install):
 ```
-wget https://rawgit.com/controllinghand/smartnode-securenode/master/installsnma.sh
+wget -N https://rawgit.com/controllinghand/smartnode-securenode/master/installsnma.sh
 bash ./installsnma.sh
 ```
 
