@@ -1,4 +1,4 @@
-# smartnode-Monitor
+# smartnode-monitor
 ### Bash Monitor for smartnode on Ubuntu 16.04 LTS x64 agent
 ### Bash Monitor for MAC OS 10.13.2 server
 ### ATTENTION: This installer is only suitable for a dedicated vps for the agent and MAC OS for the server. 
