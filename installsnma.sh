@@ -43,3 +43,7 @@ wget https://rawgit.com/controllinghand/smartnode-monitor/master/snmonagent.sh
 # dump the results into the smartadmin snmon directory
 (crontab -l 2>/dev/null | grep -v -F "snmon/snmonagent.sh" ; echo "*/10 * * * * ~/snmon/snmonagent.sh > /home/smartadmin/snmon/snmon.dat" ) | crontab -
 chmod 0700 ./snmonagent.sh
+
+# Cleanup old installsnma
+rm installsnma.sh*
+
