@@ -33,11 +33,12 @@
 
 #### Second Step
 #### This shell script also accomplishes the following on your Mac OS (Installs SmartNode Monitor Server)
-1. Creates a snmon directory in the Mac user home dir ~/snmon
-2. Installs a snmon.sh script in the ~/snmon directory for the Mac user
-3. Creates a iplist of all your SmartNodes (You will have to input manually)
-4. When you run snmon.sh it collects all of the snmon.dat files from each SmartNode and reports on status
-5. There are three status [OK] [Warning] [Failed]
+1. To avoid having to enter in the ssh password evertime please do a `ssh-add` before running the script
+2. Creates a snmon directory in the Mac user home dir ~/snmon
+3. Installs a snmon.sh script in the ~/snmon directory for the Mac user
+4. Creates a iplist of all your SmartNodes (You will have to input manually)
+5. When you run snmon.sh it collects all of the snmon.dat files from each SmartNode and reports on status
+6. There are three status [OK] [Warning] [Failed]
 
 
 #### Login to your vps as smartadmin and su - (switch to the root user to install):
