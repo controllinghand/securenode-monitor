@@ -45,5 +45,5 @@ wget https://rawgit.com/controllinghand/smartnode-monitor/master/snmonagent.sh
 chmod 0700 ./snmonagent.sh
 
 # Cleanup old installsnma
-rm installsnma.sh*
+rm ~/installsnma.s*
 
