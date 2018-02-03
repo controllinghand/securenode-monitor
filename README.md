@@ -3,7 +3,7 @@
 ### Bash Monitor for MAC OS 10.13.2 server
 ### ATTENTION: This installer is only suitable for a dedicated vps for the agent and MAC OS for the server. 
 ### This Repository will Monitor a smartnode and is designed to run from your MAC if you have MULTIPLE smartnodes
-### This script Assumes you already have a Smartnode installed. And you followed the guide from https://steemit.com/smartcash/@controllinghand/smartcash-smartnode-setup-guide-v1-4-mac-version-with-smartnode-checks-and-anti-ddos-optional-bootstrap or https://forum.smartcash.cc/t/smartcash-smartnode-setup-guide-v2-1-mac-version-quick-setup/3022
+### This script assumes you already have a Smartnode installed. And you followed the guide from https://steemit.com/smartcash/@controllinghand/smartcash-smartnode-setup-guide-v1-4-mac-version-with-smartnode-checks-and-anti-ddos-optional-bootstrap or https://forum.smartcash.cc/t/smartcash-smartnode-setup-guide-v2-1-mac-version-quick-setup/3022
 ### This also assumes that you have secured you node and have followed these guides https://steemit.com/smartcash/@controllinghand/secure-your-smartcash-smartnode-vps-on-ubuntu-16-04-with-a-mac-wallet-v1-0 or https://forum.smartcash.cc/t/secure-your-smartcash-smartnode-vps-on-ubuntu-16-04-with-a-mac-wallet-v1-0/3025
 
 ### You must run this script as root on your VPS even if you installed smartcashd as another user like smartadmin
@@ -16,17 +16,17 @@
 2. Installs the snmonagent.sh in the ~/snmon directory for the root user
 3. Creates a crontab job that runs every 30 mins snmon.sh
 4. snmonagent.sh collects the following information in this order
-  a. date script collected data
-  b. hostname
-  c. the user that is running smartcashd process 
-  d. checks to see if the smartnode is up and running
-  e. check the OS the smartnode is running
-  f. check to see if there are any OS packages that need to be updated
-  g. check % of disk space used
-  h. checks to see if the firewall is active
-  i. checks to see that port 22 ssh is limit
-  j. checks to see that port 9678 for smartnode is allow
-  k. checks to see if all the recommended cronjob are installed
+  - date script collected data
+  - hostname
+  - the user that is running smartcashd process 
+  - checks to see if the smartnode is up and running
+  - check the OS the smartnode is running
+  - check to see if there are any OS packages that need to be updated
+  - check % of disk space used
+  - checks to see if the firewall is active
+  - checks to see that port 22 ssh is limit
+  - checks to see that port 9678 for smartnode is allow
+  - checks to see if all the recommended cronjob are installed
 5. All of this data is stored in the smartadmin home directory in a file /home/smartadmin/snmon/snmon.dat
 
 #### Second Step
