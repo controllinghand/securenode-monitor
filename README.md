@@ -21,6 +21,7 @@
   - the user that is running smartcashd process 
   - checks to see if the smartnode is up and running
   - check the OS the smartnode is running
+  - check the version of smartcashd
   - check to see if there are any OS packages that need to be updated
   - check % of disk space used
   - checks to see if the firewall is active
