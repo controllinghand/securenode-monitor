@@ -14,7 +14,7 @@
 #### Please install this on all of your SmartNode VPS
 1. Creates a snmon directory in the root home directory ~/snmon
 2. Installs the snmonagent.sh in the ~/snmon directory for the root user
-3. Creates a crontab job that runs every 30 mins snmon.sh
+3. Creates a crontab job that runs every 30 mins snmonagent.sh
 4. snmonagent.sh collects the following information in this order
   - date script collected data
   - hostname
