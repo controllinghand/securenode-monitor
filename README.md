@@ -13,6 +13,7 @@
 #### This shell script accomplishes the following on your VPS (Installs SmartNode Monitor Agent)
 #### Please install this on all of your SmartNode VPS
 1. Creates a snmon directory in the root home directory ~/snmon
+2. Creates a snmon directory in the smartadmin home directory so that ssh can grab data 
 2. Installs the snmonagent.sh in the ~/snmon directory for the root user
 3. Creates a crontab job that runs every 30 mins snmonagent.sh
 4. snmonagent.sh collects the following information in this order
