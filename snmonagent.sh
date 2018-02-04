@@ -7,6 +7,10 @@
 # so that it can issue smartcash-cli
 # this script will check for that
 
+#Redirect stdout (>) into a named pipe ( <() ) running "tee"
+exec > >(tee -i /home/smartadmin/snmon/snmon.dat)
+exec 2>&1
+
 # Go to root home dir
 cd
 
@@ -21,7 +25,7 @@ fi
 
 # Get date in UTC seconds from epoc for easy math
 vpsdate=$(date +%s)
-echo "vpsdate:$vpsdate"
+echo "vpsdate:$vpsdate" 
 
 # Get hostname
 hostname=$(hostname)
