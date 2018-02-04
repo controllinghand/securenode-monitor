@@ -24,6 +24,7 @@ cd ~/snmon/
 # make sure to issue a ssh-add before you run this script
 # This will let you bypass having to enter a password every time
 curl -O https://raw.githubusercontent.com/controllinghand/smartnode-monitor/master/snmon.sh
+chmod 700 ~/snmon/snmon.sh
 
 # Download the iplist file with example
 # Please edit this file with the IP addresses of all your smartnodes
