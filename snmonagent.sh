@@ -56,10 +56,10 @@ echo "currentdiskspaceused:$dskspc"
 ufwstatus=$(ufw status  2>/dev/null | grep Status)
 echo "ufwstatus:$ufwstatus"
 # Check that firewall port 22 is Limited
-ufwssh=$(ufw status  2>/dev/null | grep 22| grep -v v6)
+ufwssh=$(ufw status  2>/dev/null | grep 22| grep -v v6 | awk '{print $2}')
 echo "ufwssh:$ufwssh"
 # Check that firewall port 9678 is Allow
-ufwscport=$(ufw status  2>/dev/null | grep 9678| grep -v v6)
+ufwscport=$(ufw status  2>/dev/null | grep 9678| grep -v v6 | awk '{print $2}')
 echo "ufwscport:$ufwscport"
 # Check that no other ports are open
 snufwother=$(ufw status 2>/dev/null | grep -v -e "Status" -e "22" -e "To" -e "--" -e "9678" |wc -l)
