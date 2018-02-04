@@ -23,11 +23,11 @@ cd ~/snmon/
 # Download the snmon.sh main script
 # make sure to issue a ssh-add before you run this script
 # This will let you bypass having to enter a password every time
-curl -O https://rawgit.com/controllinghand/smartnode-monitor/master/snmon.sh
+curl -O https://raw.githubusercontent.com/controllinghand/smartnode-monitor/master/snmon.sh
 
 # Download the iplist file with example
 # Please edit this file with the IP addresses of all your smartnodes
-curl -O https://rawgit.com/controllinghand/smartnode-monitor/master/iplist
+curl -O https://raw.githubusercontent.com/controllinghand/smartnode-monitor/master/iplist
 
 # Cleanup old installsnma
 rm ~/installsnm.s*
