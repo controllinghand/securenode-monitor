@@ -10,7 +10,7 @@ YEL='\033[0;33m'
 NC='\033[0m' # No Color
 
 # Check to see if the iplist file has any ip's for the VPSs
-numips=$(cat ~/snmon/iplist | wc -l)
+numips=$(cat ~/snmon/iplist | grep -v "#" | wc -l)
 if [[ $numips -lt 1 ]]
 then
     echo "Please enter your VPS ip's into ~/snmon/iplist to begin"
