@@ -19,7 +19,7 @@ cd
 # Check for .smartcash dir in root home
 # If not then copy smartcash.conf from smartadmin to root location
 # this will allow root to issue smartcash-cli commands if installed by smartadmin
-if [[ ! -d ~/.smartcash ]]
+if [[ ! -f ~/.smartcash/smartcash.conf ]]
 then
     mkdir ~/.smartcash
     cp /home/smartadmin/.smartcash/smartcash.conf ~/.smartcash
