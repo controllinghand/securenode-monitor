@@ -49,7 +49,7 @@ bash ./installsnma.sh
 
 #### Login to your Mac and bring up a terminal:
 ```
-curl -s https://rawgit.com/controllinghand/smartnode-monitor/master/installsnm.sh
+curl -O https://rawgit.com/controllinghand/smartnode-monitor/master/installsnm.sh
 bash ./installsnm.sh
 ```
 ### Donation to my Smartcash please: SebFkuHrqDnj3obXvMtfxtQKRgFeVpXF5x
