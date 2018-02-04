@@ -1,0 +1,5 @@
+# This is a list of all your SmartNode VPS IP addresses
+# To monitor your SmartNodes just put in the IP address
+# Also if you execute a ssh-add before you run the snmon.sh
+# You will bypass having to type in the passphase everytime
+# Example 10.10.10.10
