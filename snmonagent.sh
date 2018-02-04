@@ -53,16 +53,16 @@ dskspc=$(df -Th | grep ext4 | awk '{print $6}')
 echo "currentdiskspaceused:$dskspc"
 
 # Check that firewall is active
-ufwstatus=$(ufw status  2>/dev/null| grep Status)
+ufwstatus=$(ufw status  2>/dev/null | grep Status)
 echo "ufwstatus:$ufwstatus"
 # Check that firewall port 22 is Limited
-ufwssh=$(ufw status  2>/dev/null| grep 22| grep -v v6)
+ufwssh=$(ufw status  2>/dev/null | grep 22| grep -v v6)
 echo "ufwssh:$ufwssh"
 # Check that firewall port 9678 is Allow
-ufwscport=$(ufw status  2>/dev/null| grep 9678| grep -v v6)
+ufwscport=$(ufw status  2>/dev/null | grep 9678| grep -v v6)
 echo "ufwscport:$ufwscport"
 # Check that no other ports are open
-snufwother=$(ufw status 2>/dev/null| grep -v -e "Status" -e "22" -e "To" -e "--" -e "9678" |wc -l)
+snufwother=$(ufw status 2>/dev/null | grep -v -e "Status" -e "22" -e "To" -e "--" -e "9678" |wc -l)
 if [[ $snufwother -gt 2 ]]
 then
     echo "ufwother:Check Firewall ports only 22 and 9678 should be open"
@@ -71,13 +71,13 @@ else
 fi
 
 # Check that crontab is set for user that installed smartcashd
-cronmk=$(crontab -u $scuser -l  2>/dev/null| grep makerun)
+cronmk=$(crontab -u $scuser -l  2>/dev/null | grep makerun)
 echo "cronmakerun:$cronmk"
-cronck=$(crontab -u $scuser -l  2>/dev/null| grep checkdaemon)
+cronck=$(crontab -u $scuser -l  2>/dev/null | grep checkdaemon)
 echo "croncheckdaemon:$cronck"
-cronup=$(crontab -u $scuser -l  2>/dev/null| grep upgrade)
+cronup=$(crontab -u $scuser -l  2>/dev/null | grep upgrade)
 echo "cronupgrade:$cronup"
-croncl=$(crontab -u $scuser -l  2>/dev/null| grep clearlog)
+croncl=$(crontab -u $scuser -l  2>/dev/null | grep clearlog)
 echo "cronmakerun:$croncl"
 cronsnm=$(crontab -l 2>/dev/null | grep snmonagent)
 echo "cronsmnonagent:$cronsnm"
