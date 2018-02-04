@@ -24,7 +24,7 @@ todayUTC=$(date +%s)
 echo "todays date:$today"
 
 # Get the list of IP for all of our SmartNodes
-cat ~/snmon/iplist | while read output
+cat ~/snmon/iplist | grep -v "#" | while read output
 
 # Let's walk through each SmartNode and start checking the health
 do
