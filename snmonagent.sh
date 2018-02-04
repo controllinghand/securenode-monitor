@@ -20,8 +20,8 @@ then
 fi
 
 # Get date in UTC seconds from epoc for easy math
-date=$(date +%s)
-echo "date:$date"
+vpsdate=$(date +%s)
+echo "vpsdate:$vpsdate"
 
 # Get hostname
 hostname=$(hostname)
