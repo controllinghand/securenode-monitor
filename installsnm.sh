@@ -29,5 +29,5 @@ curl -O https://raw.githubusercontent.com/controllinghand/smartnode-monitor/mast
 # Please edit this file with the IP addresses of all your smartnodes
 curl -O https://raw.githubusercontent.com/controllinghand/smartnode-monitor/master/iplist
 
-# Cleanup old installsnma
+# Cleanup old installsnm
 rm ~/installsnm.s*
