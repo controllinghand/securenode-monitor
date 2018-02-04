@@ -1,4 +1,6 @@
 #!/bin/bash
+SHELL=/bin/bash
+PATH=$PATH:/usr/sbin
 # This is snmonagent script that will collect data every 10 mins
 # It will save the info in a data file call snmon.dat
 # This file can be view from your local wallet machine via ssh
@@ -9,7 +11,7 @@
 
 #Redirect stdout (>) into a named pipe ( <() ) running "tee"
 exec > >(tee -i /home/smartadmin/snmon/snmon.dat)
-exec 2>&1
+#exec 2>&1
 
 # Go to root home dir
 cd
@@ -57,16 +59,16 @@ dskspc=$(df -Th | grep ext4 | awk '{print $6}')
 echo "currentdiskspaceused:$dskspc"
 
 # Check that firewall is active
-ufwstatus=$(ufw status  2>/dev/null | grep Status)
+ufwstatus=$(ufw status | grep Status)
 echo "ufwstatus:$ufwstatus"
 # Check that firewall port 22 is Limited
-ufwssh=$(ufw status  2>/dev/null | grep 22| grep -v v6 | awk '{print $2}')
+ufwssh=$(ufw status | grep 22| grep -v v6 | awk '{print $2}')
 echo "ufwssh:$ufwssh"
 # Check that firewall port 9678 is Allow
-ufwscport=$(ufw status  2>/dev/null | grep 9678| grep -v v6 | awk '{print $2}')
+ufwscport=$(ufw status | grep 9678| grep -v v6 | awk '{print $2}')
 echo "ufwscport:$ufwscport"
 # Check that no other ports are open
-snufwother=$(ufw status 2>/dev/null | grep -v -e "Status" -e "22" -e "To" -e "--" -e "9678" |wc -l)
+snufwother=$(ufw status | grep -v -e "Status" -e "22" -e "To" -e "--" -e "9678" |wc -l)
 if [[ $snufwother -gt 2 ]]
 then
     echo "ufwother:Check Firewall ports only 22 and 9678 should be open"
@@ -82,6 +84,6 @@ echo "croncheckdaemon:$cronck"
 cronup=$(crontab -u $scuser -l  2>/dev/null | grep upgrade)
 echo "cronupgrade:$cronup"
 croncl=$(crontab -u $scuser -l  2>/dev/null | grep clearlog)
-echo "cronmakerun:$croncl"
-cronsnm=$(crontab -l 2>/dev/null | grep snmonagent)
+echo "cronclearlog:$croncl"
+cronsnm=$(crontab -u root -l 2>/dev/null | grep snmonagent)
 echo "cronsmnonagent:$cronsnm"
