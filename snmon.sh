@@ -2,6 +2,41 @@
 # snmon.sh
 # This script checks the health of all of your smartnode VPS
 
+# get arguments
+POSITIONAL=()
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+    -v|--verbose)
+    VFLAG="true"
+    shift # past argument
+    shift # past value
+    ;;
+    -i|--vpsip)
+    VPSIP="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    *)    # unknown option
+    POSITIONAL+=("$1") # save it in an array for later
+    shift # past argument
+    ;;
+esac
+done
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
+#echo VFLAG = "${VFLAG}"
+#echo VPSIP = "${VPSIP}"
+
+if [[ -n $1 ]]; then
+#    echo "Last line of file specified as non-opt/last argument:"
+    echo "snmon.sh: illegal option $1"
+    echo "usage snmon.sh [-v] [VPS IP]"
+    exit -1
+fi
+
 #Set colors for easy reading. Unless your are color blind sorry for that
 RED='\033[0;31m'
 GRN='\033[0;32m'
@@ -10,12 +45,18 @@ YEL='\033[0;33m'
 NC='\033[0m' # No Color
 
 # Check to see if the iplist file has any ip's for the VPSs
-numips=$(cat ~/snmon/iplist | grep -v "#" | wc -l)
-if [[ $numips -lt 1 ]]
+# Or check for a VPS IP past argument
+if [[ $VPSIP ]]
 then
-    echo "Please enter your VPS ip's into ~/snmon/iplist to begin"
-    echo "exiting"
-    exit -1
+    numips=$VPSIP
+else
+    numips=$(cat ~/snmon/iplist | grep -v "#" | wc -l)
+    if [[ $numips -lt 1 ]]
+    then
+        echo "Please enter your VPS ip's into ~/snmon/iplist to begin"
+        echo "exiting"
+        exit -1
+    fi
 fi
 
 # Add ssh-add so you don't have to type the passphrase for every VPS
@@ -25,7 +66,7 @@ then
     echo "Please enter in the ssh passphrase so you don't have to login for each node"
     echo "adding ssh-add"
     ssh-add
-fi
+fi	
 
 # Want to know when we ran this to check if data is stale
 today=$(date)
@@ -33,8 +74,15 @@ todayUTC=$(date +%s)
 echo "todays date:$today"
 
 # Get the list of IP for all of our SmartNodes
-cat ~/snmon/iplist | grep -v "#" | while read output
+if [[ $VPSIP ]]
+then
+    iplist=$VPSIP 
+else
+    iplist=$(cat ~/snmon/iplist | grep -v "#")
+fi
 
+#echo "$iplist"
+for output in $iplist
 # Let's walk through each SmartNode and start checking the health
 do
     echo ""
@@ -70,8 +118,10 @@ then
     echo -en "[${RED}FAILED${NC}]no hostname found"
     continue
 fi
-echo -en "[${GRN}OK${NC}]hostname: ${BLU}$hostname${NC}"
-echo ""
+if [[ $VFLAG ]];then 
+    echo -en "[${GRN}OK${NC}]hostname: ${BLU}$hostname${NC}"
+    echo ""
+fi
 
 # Check to see if smartcashd is running and by which user
 smartcashduser=$(echo "$DATA" | grep smartcashduser | awk -F':' '{print $2}')
@@ -80,8 +130,10 @@ then
     echo -en "[${RED}FAILED${NC}]smartcashd is not running"
     echo ""
 else
-    echo -en "[${GRN}OK${NC}]smartcashd: ${BLU}$smartcashduser${NC} is running the application"
-    echo ""
+    if [[ $VFLAG ]];then 
+        echo -en "[${GRN}OK${NC}]smartcashd: ${BLU}$smartcashduser${NC} is running the application"
+        echo ""
+    fi
 fi
 
 # Check smartnode status
@@ -92,30 +144,41 @@ then
     echo -en "[${RED}FAILED${NC}]smartcashd is not running"
     echo ""
 else
-    echo -en "[${GRN}OK${NC}]status: ${BLU}$smartnodestatus${NC}"
-    echo ""
+    if [[ $VFLAG ]];then 
+        echo -en "[${GRN}OK${NC}]status: ${BLU}$smartnodestatus${NC}"
+        echo ""
+    fi
 fi
 
 # Check OS version 
 osversion=$(echo "$DATA" | grep osversion | awk -F':' '{print $2}')
-echo -en "[${GRN}OK${NC}]OS: ${BLU}$osversion${NC}"
-echo ""
+if [[ $VFLAG ]];then 
+    echo -en "[${GRN}OK${NC}]OS: ${BLU}$osversion${NC}"
+    echo ""
+fi
 
 # Check for OS packages are available for update
 ospackagesneedupdate=$(echo "$DATA" | grep ospackagesneedupdate | awk -F':' '{print $2}')
 
 if [[ $ospackagesneedupdate -gt 0 ]]; then
-    echo -en "[${YEL}Warning${NC}]packages: ${BLU}$ospackagesneedupdate${NC} need updating"
-    echo ""
+    echo -en "[${YEL}Warning${NC}]packages: ${BLU}$ospackagesneedupdate${NC} need updating for hostname ${BLU}$hostname${NC}"
+    if [[ $VFLAG ]];then 
+        echo ""
+    fi
+    WFLAG="true"
 else
-    echo -en "[${GRN}OK${NC}]packages: ${BLU}0${NC} need updating"
-    echo ""
+    if [[ $VFLAG ]];then 
+        echo -en "[${GRN}OK${NC}]packages: ${BLU}0${NC} need updating"
+        echo ""
+    fi
 fi
 
 # Check smartcashd version 
 smartcashdversion=$(echo "$DATA" | grep smartcashdversion | awk -F':' '{print $2}')
-echo -en "[${GRN}OK${NC}]smartcashd version: ${BLU}$smartcashdversion{NC}"
-echo ""
+if [[ $VFLAG ]];then 
+    echo -en "[${GRN}OK${NC}]smartcashd version: ${BLU}$smartcashdversion{NC}"
+    echo ""
+fi
 
 # Check Disk Space 
 currentdiskspaceused=$(echo "$DATA" | grep currentdiskspaceused | awk -F':' '{print $2}')
@@ -125,8 +188,10 @@ then
     echo -en "[${RED}FAILED${NC}] $currentdiskspaceused over 90% check VPS for disk space"
     echo ""
 else
-    echo -en "[${GRN}OK${NC}]current diskspace used%: ${BLU}$currentdiskspaceused${NC}"
-    echo ""
+    if [[ $VFLAG ]];then 
+        echo -en "[${GRN}OK${NC}]current diskspace used%: ${BLU}$currentdiskspaceused${NC}"
+        echo ""
+    fi
 fi
 
 # Check ufw Firewall 
@@ -136,8 +201,10 @@ then
     echo -en "[${RED}FAILED${NC}]firewall is not active"
     echo ""
 else
-    echo -en "[${GRN}OK${NC}]firewall status: ${BLU}$ufwstatus${NC}"
-    echo ""
+    if [[ $VFLAG ]];then 
+        echo -en "[${GRN}OK${NC}]firewall status: ${BLU}$ufwstatus${NC}"
+        echo ""
+    fi
 fi
 
 # Check ufw Firewall ssh
@@ -147,8 +214,10 @@ then
     echo -en "[${RED}FAILED${NC}]check firewall ssh 22 port settings"
     echo ""
 else
-    echo -en "[${GRN}OK${NC}]firewall ssh 22: ${BLU}$ufwssh${NC}"
-    echo ""
+    if [[ $VFLAG ]];then 
+        echo -en "[${GRN}OK${NC}]firewall ssh 22: ${BLU}$ufwssh${NC}"
+        echo ""
+    fi
 fi
 
 # Check ufw Firewall smartcashd port 9678
@@ -158,8 +227,10 @@ then
     echo -en "[${RED}FAILED${NC}]check firewall smartcashd 9768 port settings"
     echo ""
 else
-    echo -en "[${GRN}OK${NC}]firewall smartcashd 9768: ${BLU}$ufwscport${NC}"
-    echo ""
+    if [[ $VFLAG ]];then 
+        echo -en "[${GRN}OK${NC}]firewall smartcashd 9768: ${BLU}$ufwscport${NC}"
+        echo ""
+    fi
 fi
 
 # Check ufw Firewall if any other ports are open 
@@ -169,8 +240,10 @@ then
     echo -en "[${RED}FAILED${NC}]$ufwother is open please close"
     echo ""
 else
-    echo -en "[${GRN}OK${NC}]firewall any other open: ${BLU}$ufwother${NC}"
-    echo ""
+    if [[ $VFLAG ]];then 
+        echo -en "[${GRN}OK${NC}]firewall any other open: ${BLU}$ufwother${NC}"
+        echo ""
+    fi
 fi
 
 # Check crontab jobs 
@@ -181,8 +254,10 @@ then
     echo -en "[${RED}FAILED${NC}]makerun cron job missing"
     echo ""
 else
-    echo -en "[${GRN}OK${NC}]makerun cronjob: ${BLU}$makerun${NC}"
-    echo ""
+    if [[ $VFLAG ]];then 
+        echo -en "[${GRN}OK${NC}]makerun cronjob: ${BLU}$makerun${NC}"
+        echo ""
+    fi
 fi
 
 # Check for checkdaemon.sh  
@@ -192,8 +267,10 @@ then
     echo -en "[${RED}FAILED${NC}]checkdaemon cron job missing"
     echo ""
 else
-    echo -en "[${GRN}OK${NC}]checkdaemon cronjob: ${BLU}$checkdaemon${NC}"
-    echo ""
+    if [[ $VFLAG ]];then 
+        echo -en "[${GRN}OK${NC}]checkdaemon cronjob: ${BLU}$checkdaemon${NC}"
+        echo ""
+    fi
 fi
 
 # Check for upgrade.sh  
@@ -203,8 +280,10 @@ then
     echo -en "[${RED}FAILED${NC}]upgrade cron job missing"
     echo ""
 else
-    echo -en "[${GRN}OK${NC}]upgrade cronjob: ${BLU}$upgrade${NC}"
-    echo ""
+    if [[ $VFLAG ]];then 
+        echo -en "[${GRN}OK${NC}]upgrade cronjob: ${BLU}$upgrade${NC}"
+        echo ""
+    fi
 fi
 
 # Check for clearlog.sh  
@@ -214,8 +293,10 @@ then
     echo -en "[${RED}FAILED${NC}]clearlog cron job missing"
     echo ""
 else
-    echo -en "[${GRN}OK${NC}]clearlog cronjob: ${BLU}$clearlog${NC}"
-    echo ""
+    if [[ $VFLAG ]];then 
+        echo -en "[${GRN}OK${NC}]clearlog cronjob: ${BLU}$clearlog${NC}"
+        echo ""
+    fi
 fi
 
 # Check for snmonagent.sh  
@@ -225,10 +306,24 @@ then
     echo -en "[${RED}FAILED${NC}]snmonagent cron job missing"
     echo ""
 else
-    echo -en "[${GRN}OK${NC}]snmonagent cronjob: ${BLU}$snmonagent${NC}"
-    echo ""
+    if [[ $VFLAG ]];then 
+        echo -en "[${GRN}OK${NC}]snmonagent cronjob: ${BLU}$snmonagent${NC}"
+        echo ""
+    fi
 fi
 
-echo ""
+if [[ ! $VFLAG ]]  || [[ $VPSIP ]] && [[ ! $WFLAG ]]
+then
+    echo -en "[${GRN}OK${NC}]${BLU}$hostname${NC}"
+else
+    if [[ $VFLAG ]]
+    then
+        echo ""
+    fi
+fi
+
+WFLAG=""
 
 done
+
+echo ""
