@@ -18,6 +18,11 @@ then
     exit -1
 fi
 
+# Add ssh-add so you don't have to type the passphrase for every VPS
+echo "Please enter in the ssh passphrase so you don't have to login for each node"
+echo "adding ssh-add"
+ssh-add
+
 # Want to know when we ran this to check if data is stale
 today=$(date)
 todayUTC=$(date +%s)
