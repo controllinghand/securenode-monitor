@@ -19,9 +19,13 @@ then
 fi
 
 # Add ssh-add so you don't have to type the passphrase for every VPS
-echo "Please enter in the ssh passphrase so you don't have to login for each node"
-echo "adding ssh-add"
-ssh-add
+sshcheck=$(ssh-add -L | grep -v "The agent has no identities")
+if [[ ! $sshcheck ]]
+then
+    echo "Please enter in the ssh passphrase so you don't have to login for each node"
+    echo "adding ssh-add"
+    ssh-add
+fi
 
 # Want to know when we ran this to check if data is stale
 today=$(date)
