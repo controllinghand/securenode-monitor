@@ -96,6 +96,7 @@ DATA=$(ssh -n smartadmin@$output 2>ssh.err cat /home/smartadmin/snmon/snmon.dat)
 if [[ -s ssh.err ]]
 then
     echo -en "[${RED}FAILED${NC}]No Data Found check monitoring agent on VPS"
+    echo ""
     rm -f ssh.err
     continue 
 fi
@@ -107,6 +108,7 @@ DIFF=$((todayUTC-vpsdate))
 if [[ $DIFF -gt 72000 ]]
 then
     echo -en "[${RED}FAILED${NC}]Data is older than 20mins check VPS"
+    echo ""
     continue
 fi
 
@@ -115,6 +117,7 @@ hostname=$(echo "$DATA" | grep hostname | awk -F':' '{print $2}')
 if [[ ! $hostname ]]
 then
     echo -en "[${RED}FAILED${NC}]no hostname found"
+    echo ""
     continue
 fi
 if [[ $VFLAG ]];then 
@@ -127,6 +130,7 @@ smartcashduser=$(echo "$DATA" | grep smartcashduser | awk -F':' '{print $2}')
 if [[ ! $smartcashduser ]]
 then
     echo -en "[${RED}FAILED${NC}]smartcashd is not running"
+    echo ""
 else
     if [[ $VFLAG ]];then 
         echo -en "[${GRN}OK${NC}]smartcashd: ${BLU}$smartcashduser${NC} is running the application"
@@ -140,6 +144,7 @@ juststatus=$(echo $smartnodestatus | awk '{print $2}')
 if [[  "$juststatus" != "successfully" ]]
 then
     echo -en "[${RED}FAILED${NC}]smartcashd is not running"
+    echo ""
 else
     if [[ $VFLAG ]];then 
         echo -en "[${GRN}OK${NC}]status: ${BLU}$smartnodestatus${NC}"
@@ -183,6 +188,7 @@ disknum=$(echo $currentdiskspaceused | awk -F'%' '{print $1}')
 if [[  $disknum -gt 90 ]]
 then
     echo -en "[${RED}FAILED${NC}] $currentdiskspaceused over 90% check VPS for disk space"
+    echo ""
 else
     if [[ $VFLAG ]];then 
         echo -en "[${GRN}OK${NC}]current diskspace used%: ${BLU}$currentdiskspaceused${NC}"
@@ -195,6 +201,7 @@ ufwstatus=$(echo "$DATA" | grep ufwstatus | awk -F':' '{print $3}')
 if [[  "$ufwstatus" != " active" ]]
 then
     echo -en "[${RED}FAILED${NC}]firewall is not active"
+    echo ""
 else
     if [[ $VFLAG ]];then 
         echo -en "[${GRN}OK${NC}]firewall status: ${BLU}$ufwstatus${NC}"
@@ -207,6 +214,7 @@ ufwssh=$(echo "$DATA" | grep ufwssh | awk -F':' '{print $2}')
 if [[  "$ufwssh" != "LIMIT" ]]
 then
     echo -en "[${RED}FAILED${NC}]check firewall ssh 22 port settings"
+    echo ""
 else
     if [[ $VFLAG ]];then 
         echo -en "[${GRN}OK${NC}]firewall ssh 22: ${BLU}$ufwssh${NC}"
@@ -219,6 +227,7 @@ ufwscport=$(echo "$DATA" | grep ufwscport | awk -F':' '{print $2}')
 if [[  "$ufwscport" != "ALLOW" ]]
 then
     echo -en "[${RED}FAILED${NC}]check firewall smartcashd 9768 port settings"
+    echo ""
 else
     if [[ $VFLAG ]];then 
         echo -en "[${GRN}OK${NC}]firewall smartcashd 9768: ${BLU}$ufwscport${NC}"
@@ -231,6 +240,7 @@ ufwother=$(echo "$DATA" | grep ufwother | awk -F':' '{print $2}')
 if [[ "$ufwother" != "none" ]]
 then
     echo -en "[${RED}FAILED${NC}]$ufwother is open please close"
+    echo ""
 else
     if [[ $VFLAG ]];then 
         echo -en "[${GRN}OK${NC}]firewall any other open: ${BLU}$ufwother${NC}"
@@ -244,6 +254,7 @@ makerun=$(echo "$DATA" | grep makerun | awk -F':' '{print $2}')
 if [[ ! $makerun ]]
 then
     echo -en "[${RED}FAILED${NC}]makerun cron job missing"
+    echo ""
 else
     if [[ $VFLAG ]];then 
         echo -en "[${GRN}OK${NC}]makerun cronjob: ${BLU}$makerun${NC}"
@@ -256,6 +267,7 @@ checkdaemon=$(echo "$DATA" | grep checkdaemon | awk -F':' '{print $2}')
 if [[ ! $checkdaemon ]]
 then
     echo -en "[${RED}FAILED${NC}]checkdaemon cron job missing"
+    echo ""
 else
     if [[ $VFLAG ]];then 
         echo -en "[${GRN}OK${NC}]checkdaemon cronjob: ${BLU}$checkdaemon${NC}"
@@ -268,6 +280,7 @@ upgrade=$(echo "$DATA" | grep upgrade | awk -F':' '{print $2}')
 if [[ ! $upgrade ]]
 then
     echo -en "[${RED}FAILED${NC}]upgrade cron job missing"
+    echo ""
 else
     if [[ $VFLAG ]];then 
         echo -en "[${GRN}OK${NC}]upgrade cronjob: ${BLU}$upgrade${NC}"
@@ -280,6 +293,7 @@ clearlog=$(echo "$DATA" | grep clearlog | awk -F':' '{print $2}')
 if [[ ! $clearlog ]]
 then
     echo -en "[${RED}FAILED${NC}]clearlog cron job missing"
+    echo ""
 else
     if [[ $VFLAG ]];then 
         echo -en "[${GRN}OK${NC}]clearlog cronjob: ${BLU}$clearlog${NC}"
@@ -292,6 +306,7 @@ snmonagent=$(echo "$DATA" | grep snmonagent | awk -F':' '{print $2}')
 if [[ ! $snmonagent ]]
 then
     echo -en "[${RED}FAILED${NC}]snmonagent cron job missing"
+    echo ""
 else
     if [[ $VFLAG ]];then 
         echo -en "[${GRN}OK${NC}]snmonagent cronjob: ${BLU}$snmonagent${NC}"
