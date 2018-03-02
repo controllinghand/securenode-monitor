@@ -50,8 +50,8 @@ npac=$(apt list --upgradable 2>/dev/null | wc -l)
 npac=$((npac-1))
 echo "ospackagesneedupdate:$npac"
 
-# Check for smartcashd current version
-snpac=$(apt list --installed 2> /dev/nul | grep smartcashd | awk '{print $2}')
+# Check for smartcashd current protocol version running
+snpac=$(smartcash-cli getinfo | grep protocolversion | awk '{print $2}' | awk -F',' '{print $1}')
 echo "smartcashdversion:$snpac"
 
 # Check Disk Space
