@@ -2,6 +2,16 @@
 # snmon.sh
 # This script checks the health of all of your smartnode VPS
 
+# As for 2/28/2018 the Protocol version should be 90025
+CURPROTOCOLVER='90025'
+
+#Set colors for easy reading. Unless your are color blind sorry for that
+RED='\033[0;31m'
+GRN='\033[0;32m'
+BLU='\033[0;34m'
+YEL='\033[0;33m'
+NC='\033[0m' # No Color
+
 # get arguments
 POSITIONAL=()
 while [[ $# -gt 0 ]]
@@ -37,12 +47,7 @@ if [[ -n $1 ]]; then
     exit -1
 fi
 
-#Set colors for easy reading. Unless your are color blind sorry for that
-RED='\033[0;31m'
-GRN='\033[0;32m'
-BLU='\033[0;34m'
-YEL='\033[0;33m'
-NC='\033[0m' # No Color
+
 
 # Check to see if the iplist file has any ip's for the VPSs
 # Or check for a VPS IP past argument
@@ -164,9 +169,7 @@ ospackagesneedupdate=$(echo "$DATA" | grep ospackagesneedupdate | awk -F':' '{pr
 
 if [[ $ospackagesneedupdate -gt 0 ]]; then
     echo -en "[${YEL}Warning${NC}]packages: ${BLU}$ospackagesneedupdate${NC} need updating for hostname ${BLU}$hostname${NC}"
-    if [[ $VFLAG ]];then 
-        echo ""
-    fi
+    echo ""
     WFLAG="true"
 else
     if [[ $VFLAG ]];then 
@@ -177,9 +180,14 @@ fi
 
 # Check smartcashd protocol version 
 smartcashdversion=$(echo "$DATA" | grep smartcashdversion | awk -F':' '{print $2}')
-if [[ $VFLAG ]];then 
-    echo -en "[${GRN}OK${NC}]smartcashd version: ${BLU}$smartcashdversion${NC}"
+if [[ $smartcashdversion != "$CURPROTOCOLVER" ]];then
+    echo -en "[${RED}FAILED${NC}] $smartcashdversion should be at $CURPROTOCOLVER"
     echo ""
+else
+    if [[ $VFLAG ]];then 
+        echo -en "[${GRN}OK${NC}]smartcashd version: ${BLU}$smartcashdversion${NC}"
+        echo ""
+    fi
 fi
 
 # Check Disk Space 
