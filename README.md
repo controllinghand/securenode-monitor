@@ -23,7 +23,7 @@
   - checks to see if the smartnode is up and running
   - check the OS the smartnode is running
   - check to see if there are any OS packages that need to be updated
-  - check the version of smartcashd
+  - check the protocol version of smartcashd currently running
   - check % of disk space used
   - checks to see if the firewall is active
   - checks to see that port 22 ssh is limit
