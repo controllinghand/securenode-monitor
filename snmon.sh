@@ -175,10 +175,10 @@ else
     fi
 fi
 
-# Check smartcashd version 
+# Check smartcashd protocol version 
 smartcashdversion=$(echo "$DATA" | grep smartcashdversion | awk -F':' '{print $2}')
 if [[ $VFLAG ]];then 
-    echo -en "[${GRN}OK${NC}]smartcashd version: ${BLU}$smartcashdversion{NC}"
+    echo -en "[${GRN}OK${NC}]smartcashd version: ${BLU}$smartcashdversion${NC}"
     echo ""
 fi
 
