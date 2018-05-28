@@ -1,9 +1,9 @@
 #!/bin/bash 
-# snmon.sh
-# This script checks the health of all of your smartnode VPS
+# znmon.sh
+# This script checks the health of all of your securenode VPS
 
-# As for 2/28/2018 the Protocol version should be 90025
-CURPROTOCOLVER='90025'
+# As for 5/28/2018 the Protocol version should be 2001150
+CURPROTOCOLVER='2001150'
 
 #Set colors for easy reading. Unless your are color blind sorry for that
 RED='\033[0;31m'
@@ -42,8 +42,8 @@ set -- "${POSITIONAL[@]}" # restore positional parameters
 
 if [[ -n $1 ]]; then
 #    echo "Last line of file specified as non-opt/last argument:"
-    echo "snmon.sh: illegal option $1"
-    echo "usage snmon.sh [-v] [VPS IP]"
+    echo "znmon.sh: illegal option $1"
+    echo "usage znmon.sh [-v] [VPS IP]"
     exit -1
 fi
 
@@ -55,10 +55,10 @@ if [[ $VPSIP ]]
 then
     numips=$VPSIP
 else
-    numips=$(cat ~/snmon/iplist | grep -v "#" | wc -l)
+    numips=$(cat ~/znmon/iplist | grep -v "#" | wc -l)
     if [[ $numips -lt 1 ]]
     then
-        echo "Please enter your VPS ip's into ~/snmon/iplist to begin"
+        echo "Please enter your VPS ip's into ~/znmon/iplist to begin"
         echo "exiting"
         exit -1
     fi
@@ -78,25 +78,25 @@ today=$(date)
 todayUTC=$(date +%s)
 echo "todays date:$today"
 
-# Get the list of IP for all of our SmartNodes
+# Get the list of IP for all of our SecureNodes
 if [[ $VPSIP ]]
 then
     iplist=$VPSIP 
 else
-    iplist=$(cat ~/snmon/iplist | grep -v "#")
+    iplist=$(cat ~/znmon/iplist | grep -v "#")
 fi
 
 #echo "$iplist"
 for output in $iplist
-# Let's walk through each SmartNode and start checking the health
+# Let's walk through each SecureNode and start checking the health
 do
     echo ""
-    echo "SmartNode Check for IP:$output"
+    echo "SecureNode Check for IP:$output"
 
 #
 # Get data from VPS 
 #
-DATA=$(ssh -n smartadmin@$output 2>ssh.err cat /home/smartadmin/snmon/snmon.dat)
+DATA=$(ssh -n zenadmin@$output 2>ssh.err cat /home/zenadmin/znmon/znmon.dat)
 
 if [[ -s ssh.err ]]
 then
@@ -130,29 +130,29 @@ if [[ $VFLAG ]];then
     echo ""
 fi
 
-# Check to see if smartcashd is running and by which user
-smartcashduser=$(echo "$DATA" | grep smartcashduser | awk -F':' '{print $2}')
-if [[ ! $smartcashduser ]]
+# Check to see if zend is running and by which user
+zenduser=$(echo "$DATA" | grep zenduser | awk -F':' '{print $2}')
+if [[ ! $zenduser ]]
 then
-    echo -en "[${RED}FAILED${NC}]smartcashd is not running"
+    echo -en "[${RED}FAILED${NC}]zend is not running"
     echo ""
 else
     if [[ $VFLAG ]];then 
-        echo -en "[${GRN}OK${NC}]smartcashd: ${BLU}$smartcashduser${NC} is running the application"
+        echo -en "[${GRN}OK${NC}]zend: ${BLU}$zenduser${NC} is running the application"
         echo ""
     fi
 fi
 
-# Check smartnode status
-smartnodestatus=$(echo "$DATA" | grep smartnodestatus | awk -F':' '{print $2}')
-juststatus=$(echo $smartnodestatus | awk '{print $2}')
+# Check securenode status
+securenodestatus=$(echo "$DATA" | grep securenodestatus | awk -F':' '{print $2}')
+juststatus=$(echo $securenodestatus | awk '{print $2}')
 if [[  "$juststatus" != "successfully" ]]
 then
-    echo -en "[${RED}FAILED${NC}]smartcashd is not running"
+    echo -en "[${RED}FAILED${NC}]zend is not running"
     echo ""
 else
     if [[ $VFLAG ]];then 
-        echo -en "[${GRN}OK${NC}]status: ${BLU}$smartnodestatus${NC}"
+        echo -en "[${GRN}OK${NC}]status: ${BLU}$securenodestatus${NC}"
         echo ""
     fi
 fi
@@ -178,14 +178,14 @@ else
     fi
 fi
 
-# Check smartcashd protocol version 
-smartcashdversion=$(echo "$DATA" | grep smartcashdversion | awk -F':' '{print $2}')
-if [[ $smartcashdversion != "$CURPROTOCOLVER" ]];then
-    echo -en "[${RED}FAILED${NC}] $smartcashdversion should be at $CURPROTOCOLVER"
+# Check zend protocol version 
+zendversion=$(echo "$DATA" | grep zendversion | awk -F':' '{print $2}')
+if [[ $zendversion != "$CURPROTOCOLVER" ]];then
+    echo -en "[${RED}FAILED${NC}] $zendversion should be at $CURPROTOCOLVER"
     echo ""
 else
     if [[ $VFLAG ]];then 
-        echo -en "[${GRN}OK${NC}]smartcashd version: ${BLU}$smartcashdversion${NC}"
+        echo -en "[${GRN}OK${NC}]zend version: ${BLU}$zendversion${NC}"
         echo ""
     fi
 fi
@@ -257,67 +257,28 @@ else
 fi
 
 # Check crontab jobs 
-# Check for makerun.sh  
-makerun=$(echo "$DATA" | grep makerun | awk -F':' '{print $2}')
-if [[ ! $makerun ]]
+# Check for acme.sh  
+acme=$(echo "$DATA" | grep acme | awk -F':' '{print $2}')
+if [[ ! $acme ]]
 then
-    echo -en "[${RED}FAILED${NC}]makerun cron job missing"
+    echo -en "[${RED}FAILED${NC}]acme cron job missing"
     echo ""
 else
     if [[ $VFLAG ]];then 
-        echo -en "[${GRN}OK${NC}]makerun cronjob: ${BLU}$makerun${NC}"
+        echo -en "[${GRN}OK${NC}]acme cronjob: ${BLU}$acme${NC}"
         echo ""
     fi
 fi
 
-# Check for checkdaemon.sh  
-checkdaemon=$(echo "$DATA" | grep checkdaemon | awk -F':' '{print $2}')
-if [[ ! $checkdaemon ]]
+# Check for znmonagent.sh  
+znmonagent=$(echo "$DATA" | grep znmonagent | awk -F':' '{print $2}')
+if [[ ! $znmonagent ]]
 then
-    echo -en "[${RED}FAILED${NC}]checkdaemon cron job missing"
+    echo -en "[${RED}FAILED${NC}]znmonagent cron job missing"
     echo ""
 else
     if [[ $VFLAG ]];then 
-        echo -en "[${GRN}OK${NC}]checkdaemon cronjob: ${BLU}$checkdaemon${NC}"
-        echo ""
-    fi
-fi
-
-# Check for upgrade.sh  
-upgrade=$(echo "$DATA" | grep upgrade | awk -F':' '{print $2}')
-if [[ ! $upgrade ]]
-then
-    echo -en "[${RED}FAILED${NC}]upgrade cron job missing"
-    echo ""
-else
-    if [[ $VFLAG ]];then 
-        echo -en "[${GRN}OK${NC}]upgrade cronjob: ${BLU}$upgrade${NC}"
-        echo ""
-    fi
-fi
-
-# Check for clearlog.sh  
-clearlog=$(echo "$DATA" | grep clearlog | awk -F':' '{print $2}')
-if [[ ! $clearlog ]]
-then
-    echo -en "[${RED}FAILED${NC}]clearlog cron job missing"
-    echo ""
-else
-    if [[ $VFLAG ]];then 
-        echo -en "[${GRN}OK${NC}]clearlog cronjob: ${BLU}$clearlog${NC}"
-        echo ""
-    fi
-fi
-
-# Check for snmonagent.sh  
-snmonagent=$(echo "$DATA" | grep snmonagent | awk -F':' '{print $2}')
-if [[ ! $snmonagent ]]
-then
-    echo -en "[${RED}FAILED${NC}]snmonagent cron job missing"
-    echo ""
-else
-    if [[ $VFLAG ]];then 
-        echo -en "[${GRN}OK${NC}]snmonagent cronjob: ${BLU}$snmonagent${NC}"
+        echo -en "[${GRN}OK${NC}]znmonagent cronjob: ${BLU}$znmonagent${NC}"
         echo ""
     fi
 fi
