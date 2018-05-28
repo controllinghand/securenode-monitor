@@ -25,7 +25,7 @@
   - check % of disk space used
   - checks to see if the firewall is active
   - checks to see that port 22 ssh is limit
-  - checks to see that port 9678 for smartnode is allow
+  - checks to see that port 9678 for securenode is allow
   - checks to see if all the recommended cronjob are installed
 5. All of this data is stored in the zenadmin home directory in a file /home/zenadmin/znmon/znmon.dat
 
