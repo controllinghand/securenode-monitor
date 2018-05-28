@@ -1,5 +1,5 @@
-# This is a list of all your SmartNode VPS IP addresses
-# To monitor your SmartNodes just put in the IP address
-# Also if you execute a ssh-add before you run the snmon.sh
-# You will bypass having to type in the passphase everytime
+# This is a list of all your ZenCash SecureNode VPS IP addresses
+# To monitor your SecureNodes just put in the IP address
+# Also if you execute a ssh-add before you run the znmon.sh
+# You will bypass having to type in the passphase every time
 # Example 10.10.10.10
