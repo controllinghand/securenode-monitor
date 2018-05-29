@@ -13,15 +13,14 @@ exec > >(tee -i /home/zenadmin/znmon/znmon.dat)
 # Go to root home dir
 cd
 
-# Check for .smartcash dir in root home
-# If not then copy smartcash.conf from smartadmin to root location
-# this will allow root to issue smartcash-cli commands if installed by smartadmin
-# Keep just in case?
-#if [[ ! -f ~/.smartcash/smartcash.conf ]]
-#then
-#    mkdir ~/.smartcash
-#    cp /home/smartadmin/.smartcash/smartcash.conf ~/.smartcash
-#fi
+# Check for .zen dir in root home
+# If not then copy zen.conf from zenadmin to root location
+# this will allow root to issue zen-cli commands if installed by zenadmin
+if [[ ! -f ~/.zen/zen.conf ]]
+then
+    mkdir ~/.zen
+    cp /home/zemadmin/.zen/zen.conf ~/.zen
+fi
 
 # Get date in UTC seconds from epoc for easy math
 vpsdate=$(date +%s)
