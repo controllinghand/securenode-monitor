@@ -74,7 +74,7 @@ cronznm=$(crontab -u root -l 2>/dev/null | grep znmonagent)
 echo "cronzmnonagent:$cronznm"
 
 # z_addr shielded address for challenges (Row 12)
-zaddr=$(zen-cli z_listaddresses | awk -F'"' '{print $2}')
+zaddr=$(zen-cli z_listaddresses | grep \" | awk -F'"' '{print $2}')
 echo "zaddr:$zaddr"
 
 # check the tls cert is verified (Row 13)
