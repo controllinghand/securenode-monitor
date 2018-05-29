@@ -34,47 +34,41 @@ echo "hostname:$hostname"
 zcuser=$(ps axo user:20,comm | grep zend | awk '{print $1}')
 echo "zenduser:$zcuser"
 
-# Check Challenge Balance 
+# Check Challenge Balance (Row 3) 
 znbalance=$(zen-cli z_gettotalbalance | grep private | awk -F'"' '{print $4}')
 echo "znbalance:$znbalance"
 
-# check OS version
+# check OS version (Row 4)
 osver=$(uname -rv | awk '{print $1 " "$2}')
 echo "osversion:$osver"
 
-# Check for OS packages are available for update
+# Check for OS packages are available for update (Row 5)
 npac=$(apt list --upgradable 2>/dev/null | wc -l)
 npac=$((npac-1))
 echo "ospackagesneedupdate:$npac"
 
-# Check for zend current protocol version running
+# Check for zend current protocol version running (Row 6)
 znpac=$(zen-cli getinfo | grep \"version | awk '{print $2}' | awk -F',' '{print $1}')
 echo "zendversion:$znpac"
 
-# Check Disk Space
+# Check Disk Space (Row 7)
 dskspc=$(df -Th | grep ext4 | awk '{print $6}')
 echo "currentdiskspaceused:$dskspc"
 
-# Check that firewall is active
+# Check that firewall is active (Row 8)
 ufwstatus=$(ufw status | grep Status)
 echo "ufwstatus:$ufwstatus"
-# Check that firewall port 22 is Limited
+# Check that firewall port 22 is Limited (Row 9)
 ufwssh=$(ufw status | grep 22| grep -v v6 | awk '{print $2}')
 echo "ufwssh:$ufwssh"
-# Check that firewall port 9678 is Allow
-ufwscport=$(ufw status | grep 9678| grep -v v6 | awk '{print $2}')
+# Check that firewall port 9033 is Allow (Row 10)
+ufwscport=$(ufw status | grep 9033| grep -v v6 | awk '{print $2}')
 echo "ufwscport:$ufwscport"
-# Check that no other ports are open
-snufwother=$(ufw status | grep -v -e "Status" -e "22" -e "To" -e "--" -e "9678" |wc -l)
-if [[ $snufwother -gt 2 ]]
-then
-    echo "ufwother:Check Firewall ports only 22 and 9678 should be open"
-else
-    echo "ufwother:none"
-fi
 
-# Check that crontab is set for user that installed smartcashd
+
+# Check that crontab is set for user that installed zend (Row 11)
 crona=$(crontab -u $zcuser -l  2>/dev/null | grep acme)
 echo "cronacme:$crona"
+# Check the agent crontab (Row 12)
 cronznm=$(crontab -u root -l 2>/dev/null | grep znmonagent)
 echo "cronzmnonagent:$cronznm"
