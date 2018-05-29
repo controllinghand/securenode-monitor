@@ -30,14 +30,13 @@ echo "vpsdate:$vpsdate"
 hostname=$(hostname)
 echo "hostname:$hostname"
 
-# Check to see if zend is running
+# Check to see who is running zend is running
 zcuser=$(ps axo user:20,comm | grep zend | awk '{print $1}')
 echo "zenduser:$zcuser"
 
 # Check securenode status
-# Keep just in case?
-#snstatus=$(smartcash-cli smartnode status | grep status | awk '{print $2" "$3" "$4}' )
-#echo "smartnodestatus:$snstatus"
+snstatus=$(smartcash-cli smartnode status | grep status | awk '{print $2" "$3" "$4}' )
+echo "smartnodestatus:$snstatus"
 
 # check OS version
 osver=$(uname -rv | awk '{print $1 " "$2}')
@@ -49,9 +48,8 @@ npac=$((npac-1))
 echo "ospackagesneedupdate:$npac"
 
 # Check for zend current protocol version running
-# Keep just in case
-#snpac=$(smartcash-cli getinfo | grep protocolversion | awk '{print $2}' | awk -F',' '{print $1}')
-#echo "smartcashdversion:$snpac"
+znpac=$(zen-cli getinfo | grep \"version | awk '{print $2}' | awk -F',' '{print $1}')
+echo "zendversion:$znpac"
 
 # Check Disk Space
 dskspc=$(df -Th | grep ext4 | awk '{print $6}')
