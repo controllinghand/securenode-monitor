@@ -72,3 +72,7 @@ echo "cronacme:$crona"
 # Check the agent crontab (Row 12)
 cronznm=$(crontab -u root -l 2>/dev/null | grep znmonagent)
 echo "cronzmnonagent:$cronznm"
+
+# z_addr shielded address for challenges (Row 12)
+zaddr=$(zen-cli z_listaddresses | awk -F'"' '{print $2}')
+echo "zaddr:$zaddr"
