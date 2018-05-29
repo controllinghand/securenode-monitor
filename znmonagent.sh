@@ -19,7 +19,7 @@ cd
 if [[ ! -f ~/.zen/zen.conf ]]
 then
     mkdir ~/.zen
-    cp /home/zemadmin/.zen/zen.conf ~/.zen
+    cp /home/zenadmin/.zen/zen.conf ~/.zen
 fi
 
 # Get date in UTC seconds from epoc for easy math
