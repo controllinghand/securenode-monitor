@@ -271,6 +271,19 @@ else
     fi
 fi
 
+# Check for cert is true (Row 13)
+cert=$(echo "$DATA" | grep cert | awk -F':' '{print $2}')
+if [[ ! $cert ]]
+then
+    echo -en "[${RED}FAILED${NC}]tls cert is not verified"
+    echo ""
+else
+    if [[ $VFLAG ]];then 
+        echo -en "[${GRN}OK${NC}]tls cert is verified: ${BLU}$cert${NC}"
+        echo ""
+    fi
+fi
+
 if [[ ! $VFLAG ]]  || [[ $VPSIP ]] && [[ ! $WFLAG ]]
 then
     echo -en "[${GRN}OK${NC}]${BLU}$hostname${NC}"
