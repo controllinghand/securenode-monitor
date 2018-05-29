@@ -117,7 +117,7 @@ then
     continue
 fi
 
-# Print out hostname
+# Print out hostname (Row 1)
 hostname=$(echo "$DATA" | grep hostname | awk -F':' '{print $2}')
 if [[ ! $hostname ]]
 then
@@ -130,7 +130,7 @@ if [[ $VFLAG ]];then
     echo ""
 fi
 
-# Check to see if zend is running and by which user
+# Check to see if zend is running and by which user (Row 2)
 zenduser=$(echo "$DATA" | grep zenduser | awk -F':' '{print $2}')
 if [[ ! $zenduser ]]
 then
@@ -143,16 +143,15 @@ else
     fi
 fi
 
-# Check securenode status
-securenodestatus=$(echo "$DATA" | grep securenodestatus | awk -F':' '{print $2}')
-juststatus=$(echo $securenodestatus | awk '{print $2}')
-if [[  "$juststatus" != "successfully" ]]
+# Check Challenge Balance (Row 3)
+znbalance=$(echo "$DATA" | grep znbalance | awk -F':' '{print $2}')
+if [[  $znbalance -lt .4 ]]
 then
-    echo -en "[${RED}FAILED${NC}]zend is not running"
+    echo -en "[${RED}FAILED${NC}] $znbalance under .4 send zencash private to xyz"
     echo ""
 else
     if [[ $VFLAG ]];then 
-        echo -en "[${GRN}OK${NC}]status: ${BLU}$securenodestatus${NC}"
+        echo -en "[${GRN}OK${NC}]current balance: ${BLU}$znbalance${NC}"
         echo ""
     fi
 fi
