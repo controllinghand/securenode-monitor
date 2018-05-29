@@ -144,10 +144,12 @@ else
 fi
 
 # Check Challenge Balance (Row 3)
+# get Z_ADDR in case need to send more (Row 12)
+zaddr=$(echo "$DATA" | grep zaddr | awk -F':' '{print $2}')
 znbalance=$(echo "$DATA" | grep znbalance | awk -F':' '{print $2}')
 minbalance="0.1"
 if (( $(echo "$znbalance < $minbalance" | bc -l) )); then
-    echo -en "[${RED}FAILED${NC}] $znbalance under $minbalance send zencash private to xyz"
+    echo -en "[${RED}FAILED${NC}] $znbalance under $minbalance send zencash private to zaddr $zaddr"
     echo ""
 else
     if [[ $VFLAG ]];then 
