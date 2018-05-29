@@ -145,9 +145,9 @@ fi
 
 # Check Challenge Balance (Row 3)
 znbalance=$(echo "$DATA" | grep znbalance | awk -F':' '{print $2}')
-if [[  $znbalance -lt .4 ]]
-then
-    echo -en "[${RED}FAILED${NC}] $znbalance under .4 send zencash private to xyz"
+minbalance="0.1"
+if (( $(echo "$znbalance < $minbalance" | bc -l) )); then
+    echo -en "[${RED}FAILED${NC}] $znbalance under $minbalance send zencash private to xyz"
     echo ""
 else
     if [[ $VFLAG ]];then 
@@ -156,14 +156,14 @@ else
     fi
 fi
 
-# Check OS version 
+# Check OS version (Row 4)
 osversion=$(echo "$DATA" | grep osversion | awk -F':' '{print $2}')
 if [[ $VFLAG ]];then 
     echo -en "[${GRN}OK${NC}]OS: ${BLU}$osversion${NC}"
     echo ""
 fi
 
-# Check for OS packages are available for update
+# Check for OS packages are available for update (Row 5)
 ospackagesneedupdate=$(echo "$DATA" | grep ospackagesneedupdate | awk -F':' '{print $2}')
 
 if [[ $ospackagesneedupdate -gt 0 ]]; then
@@ -177,7 +177,7 @@ else
     fi
 fi
 
-# Check zend protocol version 
+# Check zend protocol version (Row 6) 
 zendversion=$(echo "$DATA" | grep zendversion | awk -F':' '{print $2}')
 if [[ $zendversion != "$CURPROTOCOLVER" ]];then
     echo -en "[${RED}FAILED${NC}] $zendversion should be at $CURPROTOCOLVER"
@@ -189,7 +189,7 @@ else
     fi
 fi
 
-# Check Disk Space 
+# Check Disk Space (Row 7) 
 currentdiskspaceused=$(echo "$DATA" | grep currentdiskspaceused | awk -F':' '{print $2}')
 disknum=$(echo $currentdiskspaceused | awk -F'%' '{print $1}')
 if [[  $disknum -gt 90 ]]
@@ -203,7 +203,7 @@ else
     fi
 fi
 
-# Check ufw Firewall 
+# Check ufw Firewall (Row 8)
 ufwstatus=$(echo "$DATA" | grep ufwstatus | awk -F':' '{print $3}')
 if [[  "$ufwstatus" != " active" ]]
 then
@@ -216,7 +216,7 @@ else
     fi
 fi
 
-# Check ufw Firewall ssh
+# Check ufw Firewall ssh (Row 9)
 ufwssh=$(echo "$DATA" | grep ufwssh | awk -F':' '{print $2}')
 if [[  "$ufwssh" != "LIMIT" ]]
 then
@@ -229,34 +229,21 @@ else
     fi
 fi
 
-# Check ufw Firewall smartcashd port 9678
+# Check ufw Firewall zend port 9033 (Row 10)
 ufwscport=$(echo "$DATA" | grep ufwscport | awk -F':' '{print $2}')
 if [[  "$ufwscport" != "ALLOW" ]]
 then
-    echo -en "[${RED}FAILED${NC}]check firewall smartcashd 9768 port settings"
+    echo -en "[${RED}FAILED${NC}]check firewall zend 9033 port settings"
     echo ""
 else
     if [[ $VFLAG ]];then 
-        echo -en "[${GRN}OK${NC}]firewall smartcashd 9768: ${BLU}$ufwscport${NC}"
-        echo ""
-    fi
-fi
-
-# Check ufw Firewall if any other ports are open 
-ufwother=$(echo "$DATA" | grep ufwother | awk -F':' '{print $2}')
-if [[ "$ufwother" != "none" ]]
-then
-    echo -en "[${RED}FAILED${NC}]$ufwother is open please close"
-    echo ""
-else
-    if [[ $VFLAG ]];then 
-        echo -en "[${GRN}OK${NC}]firewall any other open: ${BLU}$ufwother${NC}"
+        echo -en "[${GRN}OK${NC}]firewall zend 9033: ${BLU}$ufwscport${NC}"
         echo ""
     fi
 fi
 
 # Check crontab jobs 
-# Check for acme.sh  
+# Check for acme.sh (Row 11) 
 acme=$(echo "$DATA" | grep acme | awk -F':' '{print $2}')
 if [[ ! $acme ]]
 then
@@ -269,7 +256,7 @@ else
     fi
 fi
 
-# Check for znmonagent.sh  
+# Check for znmonagent.sh (Row 12)
 znmonagent=$(echo "$DATA" | grep znmonagent | awk -F':' '{print $2}')
 if [[ ! $znmonagent ]]
 then
