@@ -76,3 +76,7 @@ echo "cronzmnonagent:$cronznm"
 # z_addr shielded address for challenges (Row 12)
 zaddr=$(zen-cli z_listaddresses | awk -F'"' '{print $2}')
 echo "zaddr:$zaddr"
+
+# check the tls cert is verified (Row 13)
+cert=$(zen-cli getnetworkinfo | grep tls_cert_verified | awk -F':' '{print $2}' | awk -F',' '{print $1}')
+echo "cert:$cert"
