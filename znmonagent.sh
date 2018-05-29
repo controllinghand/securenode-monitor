@@ -26,17 +26,17 @@ fi
 vpsdate=$(date +%s)
 echo "vpsdate:$vpsdate" 
 
-# Get hostname
+# Get hostname (Row 1)
 hostname=$(hostname)
 echo "hostname:$hostname"
 
-# Check to see who is running zend is running
+# Check to see who is running zend and is running (Row 2)
 zcuser=$(ps axo user:20,comm | grep zend | awk '{print $1}')
 echo "zenduser:$zcuser"
 
-# Check securenode status
-snstatus=$(smartcash-cli smartnode status | grep status | awk '{print $2" "$3" "$4}' )
-echo "smartnodestatus:$snstatus"
+# Check Challenge Balance 
+znbalance=$(zen-cli z_gettotalbalance | grep private | awk -F'"' '{print $4}')
+echo "znbalance:$znbalance"
 
 # check OS version
 osver=$(uname -rv | awk '{print $1 " "$2}')
