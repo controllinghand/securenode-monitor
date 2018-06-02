@@ -273,7 +273,7 @@ fi
 
 # Check for cert is true (Row 13)
 cert=$(echo "$DATA" | grep cert | awk -F':' '{print $2}')
-if [[ ! $cert ]]
+if [[  $cert != " true" ]]
 then
     echo -en "[${RED}FAILED${NC}]tls cert is not verified"
     echo ""
