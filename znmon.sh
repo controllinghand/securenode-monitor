@@ -2,8 +2,9 @@
 # znmon.sh
 # This script checks the health of all of your securenode VPS
 
-# As for 5/28/2018 the Protocol version should be 2001150
-CURPROTOCOLVER='2001150'
+# As of 5/28/2018 the Protocol version should be 2001150
+# As of 6/21/2018 the Protocol version should be 2001450
+CURPROTOCOLVER='2001450'
 
 #Set colors for easy reading. Unless your are color blind sorry for that
 RED='\033[0;31m'
