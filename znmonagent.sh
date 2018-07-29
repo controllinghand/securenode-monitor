@@ -67,8 +67,9 @@ echo "ufwscport:$ufwscport"
 
 
 # Check that crontab is set for user that installed zend (Row 11)
-crona=$(crontab -u $zcuser -l  2>/dev/null | grep acme)
-echo "cronacme:$crona"
+# Deprecated
+# crona=$(crontab -u $zcuser -l  2>/dev/null | grep acme)
+# echo "cronacme:$crona"
 # Check the agent crontab (Row 12)
 cronznm=$(crontab -u root -l 2>/dev/null | grep znmonagent)
 echo "cronzmnonagent:$cronznm"
