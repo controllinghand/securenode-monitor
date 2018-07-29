@@ -246,18 +246,18 @@ else
 fi
 
 # Check crontab jobs 
+# Deprecated
 # Check for acme.sh (Row 11) 
-acme=$(echo "$DATA" | grep acme | awk -F':' '{print $2}')
-if [[ ! $acme ]]
-then
-    echo -en "[${RED}FAILED${NC}]acme cron job missing"
-    echo ""
-else
-    if [[ $VFLAG ]];then 
-        echo -en "[${GRN}OK${NC}]acme cronjob: ${BLU}$acme${NC}"
-        echo ""
-    fi
-fi
+# acme=$(echo "$DATA" | grep acme | awk -F':' '{print $2}')
+# if [[ ! $acme ]]
+# then
+#     echo ""
+# else
+#     if [[ $VFLAG ]];then 
+#         echo -en "[${GRN}OK${NC}]acme cronjob: ${BLU}$acme${NC}"
+#         echo ""
+#     fi
+# fi
 
 # Check for znmonagent.sh (Row 12)
 znmonagent=$(echo "$DATA" | grep znmonagent | awk -F':' '{print $2}')
